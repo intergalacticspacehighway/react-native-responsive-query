@@ -149,5 +149,8 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "react-native-web": "^0.17.1"
   }
 }
