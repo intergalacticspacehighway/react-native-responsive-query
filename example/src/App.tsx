@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useResponsiveStyles } from 'react-native-responsive-breakpoints';
 
 export default function App() {
@@ -17,5 +17,13 @@ export default function App() {
     },
   });
 
-  return <View dataSet={dataId} />;
+  return <View dataSet={dataId} style={styles.view} />;
 }
+
+const styles = StyleSheet.create({
+  view: {
+    backgroundColor: 'yellow',
+    height: 200,
+    width: 200,
+  },
+});
