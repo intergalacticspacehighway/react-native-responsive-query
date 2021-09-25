@@ -27,47 +27,48 @@ import styleResolver from 'react-native-web/dist/exports/StyleSheet/styleResolve
 // refer line number 121 in `react-native-web/dist/exports/StyleSheet/createOrdererdCSSStyleSheetfile`.
 // We can fool this hash id generator by adding a comment on top of our media query rule in this format. /* media-query + data-attr {} */ then it'll start using media-query + data-attr as cache key
 
+const getDataAttributeForRule = (query, width, ruleSelector) => {
+  // On Dev, return the descriptive long data attr
+  return `${query}-${width}-${ruleSelector}`.toLowerCase();
+  // On Prod, return hash(query, width, ruleSelector)
+};
+
 const getMinWidthMediaQuery = (width, value) =>
-  `@media only screen and (min-width: ${width}px) { ${value} }\n`;
+  `@media only screen and (min-width: ${width}px) { ${value} }`;
 
 export const useResponsiveStyles = (style: any) => {
-  // Generate unique data-ids
-  const id = 'random-id';
-  const dataId = `[data-responsive="${id}"]`;
+  let dataSet = {};
 
-  Object.keys(style).map((value) => {
-    let cssRulesForThisBreakPoint = '';
-
-    const newStyle = createCompileableStyle(i18nStyle(style[value]));
+  Object.keys(style).map((width) => {
+    const newStyle = createCompileableStyle(i18nStyle(style[width]));
     const results = atomic(newStyle);
 
     // Rule returned by atomic has css selectors, so we'll replace it with data-attr selector
-    const resultsWithDataAttr = Object.keys(results).map((key) => {
-      return {
-        ...results[key],
-        rules: results[key].rules.map((rule) => {
-          return rule.replace('.' + results[key].identifier, dataId);
-        }),
-      };
-    });
+    Object.keys(results).forEach((key) => {
+      const oldIdentifier = results[key].identifier;
+      const dataAttribute = getDataAttributeForRule(
+        'min-width',
+        width,
+        results[key].identifier
+      );
+      dataSet[dataAttribute] = true;
+      const newIdentifier = `[data-${dataAttribute}]`;
 
-    // Loop over all the above rules and generate a single @media rule
-    Object.keys(resultsWithDataAttr).forEach((key) => {
-      const { rules } = resultsWithDataAttr[key];
-      rules.forEach((rule) => {
-        cssRulesForThisBreakPoint = cssRulesForThisBreakPoint + rule;
+      results[key].rules.forEach((oldRule) => {
+        const newRule = oldRule.replace('.' + oldIdentifier, newIdentifier);
+
+        const mediaQueryRule = getMinWidthMediaQuery(width, newRule);
+
+        // Here by prepending the /*${newIdentifier}{}*/ comment. We're kind of fooling the regex used by rn-web to verify if a rule is inserted or not.
+        // Looks safe to me, just need to keep a check if there are any implementation changes in createStyleSheet file in rn-web
+        // Second argument defines the order of the insertion. DataSet and class selectors have same CSS specificity so we need to make sure that media rules have higher precedence. Max precendence in RN web is around 2.2 so 3 ensures styles will be appended later
+        styleResolver.sheet.insert(
+          `/*${newIdentifier}{}*/${mediaQueryRule}`,
+          3
+        );
       });
     });
-
-    // refer line number 121 in createOrdererdCSSStyleSheetfile to know why rule is created in such a way.
-    // This is the workaround if we need to use internal sheet object by rn-web
-    const rule = `
-    /* ${dataId + value} {} */
-    ${getMinWidthMediaQuery(value, cssRulesForThisBreakPoint)}`;
-
-    // Here, second parameter specifies the insertion order. Setting it to 3 so responsive styles have greater specificity
-    styleResolver.sheet.insert(rule, 3);
   });
 
-  return { dataId: { responsive: id } };
+  return { dataSet };
 };
