@@ -12,7 +12,7 @@ export default function App() {
     },
     query: [
       {
-        minWidth: 400,
+        maxWidth: 500,
         style: {
           height: 300,
           width: 300,
@@ -20,12 +20,20 @@ export default function App() {
         },
       },
       {
-        minWidth: 400,
-        maxWidth: 500,
+        minWidth: 500,
         style: {
-          height: 500,
-          width: 500,
+          height: 400,
+          width: 400,
           backgroundColor: 'black',
+        },
+      },
+      {
+        minWidth: 700,
+        maxWidth: 850,
+        style: {
+          height: 600,
+          width: 600,
+          backgroundColor: 'purple',
         },
       },
     ],
