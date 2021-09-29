@@ -57,7 +57,7 @@ const getMediaQueryRule = (query: Query, newRule: string) => {
 
 export const useResponsive = (queries: UseResponsiveProps) => {
   // Initial styles are normal StyleSheet.create styles
-  const style = queries.initial
+  const styles = queries.initial
     ? StyleSheet.create({ initial: queries.initial }).initial
     : undefined;
 
@@ -93,5 +93,5 @@ export const useResponsive = (queries: UseResponsiveProps) => {
     });
   });
 
-  return { dataSet, style };
+  return { dataSet, styles };
 };

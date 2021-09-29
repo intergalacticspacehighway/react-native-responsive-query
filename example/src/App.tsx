@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { useResponsive } from 'react-native-responsive-breakpoints';
 
 export default function App() {
-  const { dataSet, style } = useResponsive({
+  const { dataSet, styles } = useResponsive({
     initial: {
       backgroundColor: 'yellow',
       height: 200,
@@ -35,7 +35,7 @@ export default function App() {
     <View
       //@ts-ignore - web only prop
       dataSet={dataSet}
-      style={style}
+      style={styles}
     />
   );
 }
