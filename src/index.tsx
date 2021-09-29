@@ -1,1 +1,1 @@
-export { useResponsiveStyles } from './useResponsiveStyles';
+export { useResponsive } from './useResponsive';

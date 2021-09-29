@@ -3,6 +3,8 @@ import createCompileableStyle from 'react-native-web/dist/exports/StyleSheet/cre
 import i18nStyle from 'react-native-web/dist/exports/StyleSheet/i18nStyle';
 import { atomic } from 'react-native-web/dist/exports/StyleSheet/compile';
 import styleResolver from 'react-native-web/dist/exports/StyleSheet/styleResolver';
+import type { Query, UseResponsiveProps } from './types';
+import { StyleSheet } from 'react-native';
 
 // 1. i18nStyle - Does swapping of ltr styles if enabled by user
 
@@ -27,28 +29,49 @@ import styleResolver from 'react-native-web/dist/exports/StyleSheet/styleResolve
 // refer line number 121 in `react-native-web/dist/exports/StyleSheet/createOrdererdCSSStyleSheetfile`.
 // We can fool this hash id generator by adding a comment on top of our media query rule in this format. /* media-query + data-attr {} */ then it'll start using media-query + data-attr as cache key
 
-const getDataAttributeForRule = (query, width, ruleSelector) => {
-  // On Dev, return the descriptive long data attr
-  return `${query}-${width}-${ruleSelector}`.toLowerCase();
-  // On Prod, return hash(query, width, ruleSelector)
+const getDataAttributeForRule = (queryRule: Query, ruleSelector: string) => {
+  if (
+    typeof queryRule.minWidth === 'number' &&
+    typeof queryRule.maxWidth === 'number'
+  ) {
+    return `min-width-${queryRule.minWidth}-max-width-${queryRule.maxWidth}-${ruleSelector}`.toLowerCase();
+  } else if (typeof queryRule.minWidth === 'number') {
+    return `min-width-${queryRule.minWidth}-${ruleSelector}`.toLowerCase();
+  } else if (typeof queryRule.maxWidth === 'number') {
+    return `max-width-${queryRule.maxWidth}-${ruleSelector}`.toLowerCase();
+  }
 };
 
-const getMinWidthMediaQuery = (width, value) =>
-  `@media only screen and (min-width: ${width}px) { ${value} }`;
+const getMediaQueryRule = (query: Query, newRule: string) => {
+  if (
+    typeof query.minWidth === 'number' &&
+    typeof query.maxWidth === 'number'
+  ) {
+    return `@media only screen and (min-width: ${query.minWidth}px) and (max-width: ${query.maxWidth}px) { ${newRule} }`;
+  } else if (typeof query.minWidth === 'number') {
+    return `@media only screen and (min-width: ${query.minWidth}px) { ${newRule} }`;
+  } else if (typeof query.maxWidth === 'number') {
+    return `@media only screen and (max-width: ${query.maxWidth}px) { ${newRule} }`;
+  }
+};
 
-export const useResponsiveStyles = (style: any) => {
+export const useResponsive = (queries: UseResponsiveProps) => {
+  // Initial styles are normal StyleSheet.create styles
+  const style = queries.initial
+    ? StyleSheet.create({ initial: queries.initial }).initial
+    : undefined;
+
   let dataSet = {};
 
-  Object.keys(style).map((width) => {
-    const newStyle = createCompileableStyle(i18nStyle(style[width]));
+  queries.query.forEach((queryRule) => {
+    const newStyle = createCompileableStyle(i18nStyle(queryRule.style));
     const results = atomic(newStyle);
 
     // Rule returned by atomic has css selectors, so we'll replace it with data-attr selector
     Object.keys(results).forEach((key) => {
       const oldIdentifier = results[key].identifier;
       const dataAttribute = getDataAttributeForRule(
-        'min-width',
-        width,
+        queryRule,
         results[key].identifier
       );
       dataSet[dataAttribute] = true;
@@ -57,7 +80,7 @@ export const useResponsiveStyles = (style: any) => {
       results[key].rules.forEach((oldRule) => {
         const newRule = oldRule.replace('.' + oldIdentifier, newIdentifier);
 
-        const mediaQueryRule = getMinWidthMediaQuery(width, newRule);
+        const mediaQueryRule = getMediaQueryRule(queryRule, newRule);
 
         // Here by prepending the /*${newIdentifier}{}*/ comment, we're kind of fooling the regex used by rn-web to verify if a rule is inserted or not.
         // Looks safe to me, just need to keep a check if there are any implementation changes in createStyleSheet file in rn-web in future.
@@ -70,5 +93,5 @@ export const useResponsiveStyles = (style: any) => {
     });
   });
 
-  return { dataSet };
+  return { dataSet, style };
 };
