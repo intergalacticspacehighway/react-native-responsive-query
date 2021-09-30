@@ -12,3 +12,10 @@ export type UseResponsiveProps = {
   initial?: NamedStyles;
   query: Query[];
 };
+
+export type DataSet = { [key: string]: boolean };
+
+export type UseResponsiveReturnType = {
+  styles?: NamedStyles[];
+  dataSet?: DataSet;
+};
