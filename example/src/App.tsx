@@ -1,29 +1,49 @@
 import * as React from 'react';
 
-import { StyleSheet, View } from 'react-native';
-import { useResponsiveStyles } from 'react-native-responsive-breakpoints';
+import { View } from 'react-native';
+import { useResponsive } from 'react-native-responsive-breakpoints';
 
 export default function App() {
-  const { dataSet } = useResponsiveStyles({
-    480: {
-      backgroundColor: 'black',
-      height: 100,
-      width: 100,
+  const { dataSet, styles } = useResponsive({
+    initial: {
+      backgroundColor: 'yellow',
+      height: 200,
+      width: 200,
     },
-    800: {
-      backgroundColor: 'pink',
-      height: 50,
-      width: 50,
-    },
+    query: [
+      {
+        maxWidth: 500,
+        style: {
+          height: 300,
+          width: 300,
+          backgroundColor: 'pink',
+        },
+      },
+      {
+        minWidth: 500,
+        style: {
+          height: 400,
+          width: 400,
+          backgroundColor: 'black',
+        },
+      },
+      {
+        minWidth: 700,
+        maxWidth: 850,
+        style: {
+          height: 600,
+          width: 600,
+          backgroundColor: 'purple',
+        },
+      },
+    ],
   });
 
-  return <View dataSet={dataSet} style={styles.view} />;
+  return (
+    <View
+      //@ts-ignore - web only prop
+      dataSet={dataSet}
+      style={styles}
+    />
+  );
 }
-
-const styles = StyleSheet.create({
-  view: {
-    backgroundColor: 'yellow',
-    height: 200,
-    width: 200,
-  },
-});
