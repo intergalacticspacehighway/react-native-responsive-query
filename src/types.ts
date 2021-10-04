@@ -8,14 +8,14 @@ export type Query = {
   style?: NamedStyles;
 };
 
-export type UseResponsiveProps = {
+export type UseResponsiveQueryProps = {
   initial?: NamedStyles;
   query: Query[];
 };
 
 export type DataSet = { [key: string]: boolean };
 
-export type UseResponsiveReturnType = {
+export type UseResponsiveQueryReturnType = {
   styles?: NamedStyles[];
   dataSet?: DataSet;
 };
