@@ -13,7 +13,7 @@ import type {
   UseResponsiveQueryReturnType,
 } from './types';
 import { StyleSheet } from 'react-native';
-import React from 'react';
+import { useStableMemo } from './useStableMemo';
 
 // 1. i18nStyle - Does swapping of ltr styles if enabled by user
 
@@ -43,7 +43,7 @@ const MEDIA_QUERY_STYLESHEET_GROUP = 3;
 export const useResponsiveQuery = (
   queries: UseResponsiveQueryProps
 ): UseResponsiveQueryReturnType => {
-  const values = React.useMemo(() => {
+  const values = useStableMemo(() => {
     const styles = queries.initial
       ? [StyleSheet.create({ initial: queries.initial }).initial]
       : undefined;

@@ -8669,6 +8669,11 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
+stable-hash@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/stable-hash/-/stable-hash-0.0.2.tgz#a909deaa5b9d430b100ca0a10132a533f2665e94"
+  integrity sha512-tPwQ3c1rLIwbJpq59duoznegEbmgfV630C2n4R4G96LKBFljgK8j+O9AxjqB6cAzu4gE7s4pByrLWtZel8E+Mg==
+
 stack-utils@^1.0.1:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/stack-utils/-/stack-utils-1.0.5.tgz#a19b0b01947e0029c8e451d5d61a498f5bb1471b"
@@ -9159,7 +9164,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.1.3:
+typescript@^4.4.3:
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.3.tgz#bdc5407caa2b109efd4f82fe130656f977a29324"
   integrity sha512-4xfscpisVgqqDfPaJo5vkd+Qd/ItkoagnHpufr+i2QCHBsNYp+G7UAoyFl8aPtx879u38wPV65rZ8qbGZijalA==
