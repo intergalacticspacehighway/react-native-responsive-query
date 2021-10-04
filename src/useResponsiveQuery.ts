@@ -1,16 +1,16 @@
-import React from 'react';
 import type {
   UseResponsiveQueryProps,
   UseResponsiveQueryReturnType,
 } from './types';
 import { StyleSheet, useWindowDimensions } from 'react-native';
+import { useStableMemo } from './useStableMemo';
 
 export const useResponsiveQuery = (
   queries: UseResponsiveQueryProps
 ): UseResponsiveQueryReturnType => {
   const windowWidth = useWindowDimensions().width;
 
-  const values = React.useMemo(() => {
+  const values = useStableMemo(() => {
     let styles = queries.initial
       ? [StyleSheet.create({ initial: queries.initial }).initial]
       : [];
