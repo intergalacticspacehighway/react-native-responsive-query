@@ -9,8 +9,8 @@ import styleResolver from 'react-native-web/dist/exports/StyleSheet/styleResolve
 import type {
   DataSet,
   Query,
-  UseResponsiveProps,
-  UseResponsiveReturnType,
+  UseResponsiveQueryProps,
+  UseResponsiveQueryReturnType,
 } from './types';
 import { StyleSheet } from 'react-native';
 import React from 'react';
@@ -40,9 +40,9 @@ import React from 'react';
 
 const MEDIA_QUERY_STYLESHEET_GROUP = 3;
 
-export const useResponsive = (
-  queries: UseResponsiveProps
-): UseResponsiveReturnType => {
+export const useResponsiveQuery = (
+  queries: UseResponsiveQueryProps
+): UseResponsiveQueryReturnType => {
   const values = React.useMemo(() => {
     const styles = queries.initial
       ? [StyleSheet.create({ initial: queries.initial }).initial]

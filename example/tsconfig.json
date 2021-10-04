@@ -3,7 +3,7 @@
     "jsx": "react-native",
     "target": "esnext",
     "paths": {
-      "react-native-responsive-breakpoints": ["../src/index"]
+      "react-native-responsive-query": ["../src/index"]
     },
     "lib": [
       "esnext"

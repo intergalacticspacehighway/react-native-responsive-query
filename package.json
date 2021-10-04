@@ -1,5 +1,5 @@
 {
-  "name": "react-native-responsive-breakpoints",
+  "name": "react-native-responsive-query",
   "version": "0.1.0",
   "description": ".",
   "main": "lib/commonjs/index",
@@ -13,7 +13,7 @@
     "android",
     "ios",
     "cpp",
-    "react-native-responsive-breakpoints.podspec",
+    "react-native-responsive-query.podspec",
     "!lib/typescript/example",
     "!android/build",
     "!ios/build",
@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/intergalacticspacehighway/react-native-responsive-breakpoints",
+  "repository": "https://github.com/intergalacticspacehighway/react-native-responsive-query",
   "author": "Nishan <nishanbende@gmail.com> (https://github.com/intergalacticspacehighway)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/intergalacticspacehighway/react-native-responsive-breakpoints/issues"
+    "url": "https://github.com/intergalacticspacehighway/react-native-responsive-query/issues"
   },
-  "homepage": "https://github.com/intergalacticspacehighway/react-native-responsive-breakpoints#readme",
+  "homepage": "https://github.com/intergalacticspacehighway/react-native-responsive-query#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

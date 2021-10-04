@@ -1,10 +1,10 @@
 {
-  "name": "react-native-responsive-breakpoints-example",
+  "name": "react-native-responsive-query-example",
   "displayName": "ResponsiveBreakpoints Example",
   "expo": {
-    "name": "react-native-responsive-breakpoints-example",
-    "slug": "react-native-responsive-breakpoints-example",
-    "description": "Example app for react-native-responsive-breakpoints",
+    "name": "react-native-responsive-query-example",
+    "slug": "react-native-responsive-query-example",
+    "description": "Example app for react-native-responsive-query",
     "privacy": "public",
     "version": "1.0.0",
     "platforms": [

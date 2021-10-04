@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { View } from 'react-native';
-import { useResponsive } from 'react-native-responsive-breakpoints';
+import { useResponsiveQuery } from 'react-native-responsive-query';
 
 export default function App() {
-  const { dataSet, styles } = useResponsive({
+  const { dataSet, styles } = useResponsiveQuery({
     initial: {
       backgroundColor: 'yellow',
       height: 200,
@@ -12,7 +12,7 @@ export default function App() {
     },
     query: [
       {
-        maxWidth: 500,
+        minWidth: 400,
         style: {
           height: 300,
           width: 300,
@@ -20,7 +20,7 @@ export default function App() {
         },
       },
       {
-        minWidth: 500,
+        minWidth: 1200,
         style: {
           height: 400,
           width: 400,
@@ -28,8 +28,7 @@ export default function App() {
         },
       },
       {
-        minWidth: 700,
-        maxWidth: 850,
+        minWidth: 1600,
         style: {
           height: 600,
           width: 600,

@@ -1,6 +1,6 @@
 {
-  "name": "react-native-responsive-breakpoints-example",
-  "description": "Example app for react-native-responsive-breakpoints",
+  "name": "react-native-responsive-query-example",
+  "description": "Example app for react-native-responsive-query",
   "version": "0.0.1",
   "private": true,
   "main": "index",

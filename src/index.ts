@@ -1,2 +1,2 @@
-export { useResponsive } from './useResponsive';
+export { useResponsiveQuery } from './useResponsiveQuery';
 export * from './types';

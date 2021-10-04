@@ -1,5 +1,5 @@
 import React from 'react';
-import { useResponsive } from '../useResponsive';
+import { useResponsiveQuery } from '../useResponsiveQuery';
 import { render } from '@testing-library/react-native';
 import { View } from 'react-native';
 
@@ -7,7 +7,7 @@ import { View } from 'react-native';
 describe('test responsive styles', () => {
   it('verifies min width query', () => {
     const App = () => {
-      const { styles } = useResponsive({
+      const { styles } = useResponsiveQuery({
         initial: {
           backgroundColor: 'yellow',
         },
@@ -34,7 +34,7 @@ describe('test responsive styles', () => {
   });
   it('doesnt apply min width query when it shouldnt', () => {
     const App = () => {
-      const { styles } = useResponsive({
+      const { styles } = useResponsiveQuery({
         initial: {
           backgroundColor: 'yellow',
         },
