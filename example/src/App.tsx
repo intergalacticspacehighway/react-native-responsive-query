@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useResponsiveQuery } from 'react-native-responsive-query';
 
 export default function App() {
@@ -28,12 +28,19 @@ export default function App() {
         },
       },
       {
-        minWidth: 1600,
-        style: {
-          height: 600,
-          width: 600,
-          backgroundColor: 'purple',
-        },
+        minWidth: 1300,
+        style: [
+          StyleSheet.create({
+            wrapper: {
+              height: 600,
+              width: 600,
+            },
+          }).wrapper,
+          {
+            width: 600,
+            backgroundColor: 'purple',
+          },
+        ],
       },
     ],
   });

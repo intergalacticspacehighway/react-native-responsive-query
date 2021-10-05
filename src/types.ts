@@ -1,21 +1,21 @@
-import type { TextStyle, ImageStyle, ViewStyle } from 'react-native';
+import type { StyleSheet } from 'react-native';
 
-type NamedStyles = ViewStyle | TextStyle | ImageStyle;
+type StyleSheetStyle = Parameters<typeof StyleSheet.create>[0]['initial'];
 
 export type Query = {
   minWidth?: number;
   maxWidth?: number;
-  style?: NamedStyles;
+  style?: StyleSheetStyle | StyleSheetStyle[];
 };
 
 export type UseResponsiveQueryProps = {
-  initial?: NamedStyles;
+  initial?: StyleSheetStyle | StyleSheetStyle[];
   query: Query[];
 };
 
 export type DataSet = { [key: string]: boolean };
 
 export type UseResponsiveQueryReturnType = {
-  styles?: NamedStyles[];
+  styles?: StyleSheetStyle[];
   dataSet?: DataSet;
 };
