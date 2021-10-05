@@ -1,7 +1,7 @@
 import React from 'react';
 import { useResponsiveQuery } from '../useResponsiveQuery';
 import { render } from '@testing-library/react-native';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 // In RN Dimension is mocked to 750px
 describe('test responsive styles', () => {
@@ -55,5 +55,42 @@ describe('test responsive styles', () => {
     const view = getByTestId('test');
 
     expect(view.props.style).toEqual([{ backgroundColor: 'yellow' }]);
+  });
+
+  it('verifies min width and max width array queries', () => {
+    const App = () => {
+      const { styles } = useResponsiveQuery({
+        initial: [
+          {
+            backgroundColor: 'yellow',
+          },
+          { height: 100 },
+        ],
+        query: [
+          {
+            minWidth: 650,
+            style: [
+              StyleSheet.create({
+                wrapper: {
+                  backgroundColor: 'black',
+                },
+              }).wrapper,
+              {
+                width: 100,
+              },
+            ],
+          },
+        ],
+      });
+
+      return <View testID="test" style={styles} />;
+    };
+
+    const { getByTestId } = render(<App />);
+    const view = getByTestId('test');
+    expect(view.props.style).toEqual([
+      { backgroundColor: 'yellow', height: 100 },
+      { backgroundColor: 'black', width: 100 },
+    ]);
   });
 });

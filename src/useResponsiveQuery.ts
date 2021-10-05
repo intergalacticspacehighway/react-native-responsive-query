@@ -12,11 +12,16 @@ export const useResponsiveQuery = (
 
   const values = useStableMemo(() => {
     let styles = queries.initial
-      ? [StyleSheet.create({ initial: queries.initial }).initial]
+      ? [
+          StyleSheet.create({ initial: StyleSheet.flatten(queries.initial) })
+            .initial,
+        ]
       : [];
 
     queries.query.forEach((queryRule) => {
       if (queryRule.style) {
+        const flattenQueryStyle = StyleSheet.flatten(queryRule.style);
+
         if (
           typeof queryRule.maxWidth === 'number' &&
           typeof queryRule.minWidth === 'number'
@@ -26,20 +31,20 @@ export const useResponsiveQuery = (
             windowWidth <= queryRule.maxWidth
           ) {
             styles.push(
-              StyleSheet.create({ rangeStyle: queryRule.style }).rangeStyle
+              StyleSheet.create({ rangeStyle: flattenQueryStyle }).rangeStyle
             );
           }
         } else if (typeof queryRule.minWidth === 'number') {
           if (windowWidth >= queryRule.minWidth) {
             styles.push(
-              StyleSheet.create({ minWidthStyle: queryRule.style })
+              StyleSheet.create({ minWidthStyle: flattenQueryStyle })
                 .minWidthStyle
             );
           }
         } else if (typeof queryRule.maxWidth === 'number') {
           if (windowWidth <= queryRule.maxWidth) {
             styles.push(
-              StyleSheet.create({ maxWidthStyle: queryRule.style })
+              StyleSheet.create({ maxWidthStyle: flattenQueryStyle })
                 .maxWidthStyle
             );
           }

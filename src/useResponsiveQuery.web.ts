@@ -45,13 +45,17 @@ export const useResponsiveQuery = (
 ): UseResponsiveQueryReturnType => {
   const values = useStableMemo(() => {
     const styles = queries.initial
-      ? [StyleSheet.create({ initial: queries.initial }).initial]
+      ? [
+          StyleSheet.create({ initial: StyleSheet.flatten(queries.initial) })
+            .initial,
+        ]
       : undefined;
 
     let dataSet: DataSet = {};
 
     queries.query.forEach((queryRule) => {
-      const newStyle = createCompileableStyle(i18nStyle(queryRule.style));
+      const flattenQueryStyle = StyleSheet.flatten(queryRule.style);
+      const newStyle = createCompileableStyle(i18nStyle(flattenQueryStyle));
       const results = atomic(newStyle);
 
       // Rule returned by atomic has css selectors, so we'll replace it with data-attr selector
