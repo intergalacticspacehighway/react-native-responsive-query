@@ -8,14 +8,22 @@ export type Query = {
   style?: StyleSheetStyle | StyleSheetStyle[];
 };
 
-export type UseResponsiveQueryProps = {
+export type UseResponsiveQueryParams = {
   initial?: StyleSheetStyle | StyleSheetStyle[];
   query: Query[];
 };
 
 export type DataSet = { [key: string]: boolean };
 
-export type UseResponsiveQueryReturnType = {
+export type GetResponsiveStylesParams = UseResponsiveQueryParams;
+
+export type GetResponsiveStylesReturnType = {
   styles?: StyleSheetStyle[];
   dataSet?: DataSet;
+};
+
+export type UseResponsiveQueryReturnType = GetResponsiveStylesReturnType & {
+  getResponsiveStyles: (
+    params: GetResponsiveStylesParams
+  ) => GetResponsiveStylesReturnType;
 };
