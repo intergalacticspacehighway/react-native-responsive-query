@@ -13,7 +13,7 @@ export type UseResponsiveQueryParams = {
   query: Query[];
 };
 
-export type DataSet = { [key: string]: boolean };
+export type DataSet = { [key: string]: string };
 
 export type GetResponsiveStylesParams = UseResponsiveQueryParams;
 
