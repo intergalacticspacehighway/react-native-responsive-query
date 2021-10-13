@@ -134,6 +134,9 @@ const getResponsiveStyles = (
       if (mediaRules) {
         const mediaQueryRule = getMediaQueryRule(queryRule, mediaRules);
 
+        // Here by prepending the /*${queryHash}{}*/ comment, we're kind of tricking the regex used by rn-web to verify if a rule is inserted or not.
+        // Looks safe to me, just need to keep a check if there are any implementation changes in createStyleSheet file in rn-web in future.
+        // Second argument defines the order of the insertion. DataSet and class selectors have same CSS specificity so we need to make sure that media rules have higher precedence. Max precendence in RN web is around 2.2 so 3 ensures styles will be appended later
         styleResolver.sheet.insert(
           `/*${queryHash}{}*/${mediaQueryRule}`,
           MEDIA_QUERY_STYLESHEET_GROUP
