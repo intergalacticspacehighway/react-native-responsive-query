@@ -1,6 +1,6 @@
 # React native responsive query
 
-- Responsive style hook for React Native apps.
+Responsive style hook for React Native apps.
 
 ## Why?
 
@@ -131,8 +131,11 @@ return <View dataSet={dataSet} style={styles} />;
 ## Examples
 
 - SSR React native web app using NextJS
+
   GitHub - https://github.com/intergalacticspacehighway/rnw-responsive-ssr
+
   URL - https://rnw-responsive-ssr.vercel.app/
+
   Try disabling JavaScript in browser, responsive styles will still work.
 
 ## Credits
