@@ -18,6 +18,9 @@ import stableHash from 'stable-hash';
 import hash from './hash';
 import type { GetResponsiveStylesReturnType } from 'react-native-responsive-query';
 import { useStableMemo } from './useStableMemo';
+import { getResponsiveStylesImpl, useDimensionsWithEnable } from './common';
+import { ResponsiveQueryContext } from './ResponsiveQueryProvider';
+import React from 'react';
 
 // 1. i18nStyle - Does swapping of ltr styles if enabled by user
 
@@ -47,14 +50,35 @@ const MEDIA_QUERY_STYLESHEET_GROUP = 3;
 export const useResponsiveQuery = (
   queries?: UseResponsiveQueryParams
 ): UseResponsiveQueryReturnType => {
+  const responsiveQueryContext = React.useContext(ResponsiveQueryContext);
+  const disableCSSMediaQueries =
+    queries?.disableCSSMediaQueries ??
+    responsiveQueryContext.disableCSSMediaQueries;
+
+  // Only attaches listener if disableCSSMediaQueries is true
+  const windowWidth = useDimensionsWithEnable({
+    enable: disableCSSMediaQueries,
+  }).width;
+
   const values = useStableMemo(() => {
-    if (queries) {
-      const { styles, dataSet } = getResponsiveStyles(queries);
-      return { dataSet, styles, getResponsiveStyles };
+    // Use the non-media query responsive styling
+    if (disableCSSMediaQueries) {
+      const getResponsiveStyles = getResponsiveStylesImpl(windowWidth);
+      if (queries) {
+        const { styles } = getResponsiveStyles(queries);
+        return { styles, getResponsiveStyles };
+      } else {
+        return { getResponsiveStyles };
+      }
     } else {
-      return { getResponsiveStyles };
+      if (queries) {
+        const { styles, dataSet } = getResponsiveStyles(queries);
+        return { dataSet, styles, getResponsiveStyles };
+      } else {
+        return { getResponsiveStyles };
+      }
     }
-  }, [queries]);
+  }, [queries, windowWidth, disableCSSMediaQueries]);
 
   return values;
 };
@@ -91,7 +115,7 @@ const getMediaQueryRule = (query: Query, newRule: string) => {
 const getResponsiveStyles = (
   queries: GetResponsiveStylesParams
 ): GetResponsiveStylesReturnType => {
-  const queryString = stableHash(queries);
+  const queryString = stableHash(queries.query);
   const queriesHash = hash(queryString);
 
   const styles = queries.initial
