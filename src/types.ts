@@ -11,6 +11,7 @@ export type Query = {
 export type UseResponsiveQueryParams = {
   initial?: StyleSheetStyle | StyleSheetStyle[];
   query: Query[];
+  disableCSSMediaQueries?: boolean;
 };
 
 export type DataSet = { [key: string]: string };

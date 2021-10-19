@@ -2,6 +2,11 @@ import React from 'react';
 import { useResponsiveQuery } from '../useResponsiveQuery';
 import { render } from '@testing-library/react-native';
 import { StyleSheet, View } from 'react-native';
+import { ResponsiveQueryProvider } from '../ResponsiveQueryProvider';
+
+const renderWithProvider = (element: React.ReactNode) => {
+  return render(<ResponsiveQueryProvider>{element}</ResponsiveQueryProvider>);
+};
 
 // In RN Dimension is mocked to 750px
 describe('test responsive styles', () => {
@@ -86,7 +91,7 @@ describe('test responsive styles', () => {
       return <View testID="test" style={styles} />;
     };
 
-    const { getByTestId } = render(<App />);
+    const { getByTestId } = renderWithProvider(<App />);
     const view = getByTestId('test');
     expect(view.props.style).toEqual([
       { backgroundColor: 'yellow', height: 100 },
