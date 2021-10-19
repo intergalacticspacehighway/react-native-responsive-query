@@ -6,12 +6,7 @@ Responsive style hook for React Native apps.
 
 - This hook aims to provide an API that can be useful for universal design systems like [dripsy](https://github.com/nandorojo/dripsy), [NativeBase](https://github.com/GeekyAnts/NativeBase) and React Native apps that uses responsive styling.
 - It transforms styles to CSS media-query on [react native web](https://github.com/necolas/react-native-web) that can be useful for responsive SSR react native web apps.
-
-#### You might not need this if,
-
-- You are not using SSR + React Native Web + Responsive Styling.
-- We're relying on internal RNW functions for injecting + generating styles. (most of these functions are pure (and memoises) but the current injecting solution might not be the cleanest). [Checkout source](https://github.com/intergalacticspacehighway/react-native-responsive-query/blob/main/src/useResponsiveQuery.web.ts)
-- Read more here and evaluate - [#1688](https://github.com/necolas/react-native-web/issues/1688) and [RNW talk](https://youtu.be/tFFn39lLO-U)
+- Read [disableCSSMediaQueries](#disable-css-media-queries) section.
 
 ## Installation
 
@@ -72,6 +67,7 @@ export default function App() {
 
 - initial (optional): ReactNativeStyle
 - query: Array<{minWidth: number, maxWidth: number, style: ReactNativeStyle}>
+- disableCSSMediaQueries (optional): boolean
 
 ### getResponsiveStyles(params?: UseResponsiveQueryParams)
 
@@ -106,13 +102,7 @@ export default function App() {
 ## Range query
 
 ```js
-const { getResponsiveStyles } = useResponsiveQuery();
-
-const { dataSet, styles } = getResponsiveStyles({
-  initial: {
-    height: 200,
-    width: 200,
-  },
+const { styles, dataSet } = useResponsiveQuery({
   query: [
     {
       minWidth: 400,
@@ -129,10 +119,50 @@ return <View dataSet={dataSet} style={styles} />;
 
 - Here, background color `pink` will be applied only when screen width is >= 400 and <= 800.
 
+## Disable CSS media queries
+
+- You can disable CSS media queries by using `disableCSSMediaQueries` boolean at the hook level or the Provider level.
+
+### Using a Provider
+
+- The below snippet will disable CSS media queries for all the hooks.
+
+```js
+import { ResponsiveQueryProvider } from 'react-native-responsive-query';
+
+function App() {
+  return (
+    <ResponsiveQueryProvider disableCSSMediaQueries>
+      {/* Your app goes here */}
+    </ResponsiveQueryProvider>
+  );
+}
+```
+
+### Using hook
+
+- The below hook will disable CSS media queries for this particular hook.
+
+```js
+const { styles } = useResponsiveQuery({
+  disableCSSMediaQueries: true,
+  query: [
+    {
+      minWidth: 400,
+      style: {
+        backgroundColor: 'pink',
+      },
+    },
+  ],
+});
+
+return <View style={styles} />;
+```
+
 ## How it works?
 
 - It uses `dataSet` prop to add responsive styling.
-- This library uses some internal/undocumented functions used by React Native web to transform react native styles to web/css styles. Checkout `src/useResponsiveQuery.web.ts` for comments.
+- We're relying on internal/undocumented RNW functions for injecting + generating styles. (most of these functions are pure (and memoises) but the current injecting solution might not be the cleanest). [Checkout source](https://github.com/intergalacticspacehighway/react-native-responsive-query/blob/main/src/useResponsiveQuery.web.ts)
 
 ## Examples
 
@@ -147,6 +177,16 @@ return <View dataSet={dataSet} style={styles} />;
 ## Credits
 
 - Thanks to [Fernando](https://github.com/nandorojo) for the hook idea and helping to shape the hook API :)
+
+---
+
+**NOTE**
+
+Media query is currently a web-only feature. RNW recommends on using Dimension listener (which uses window resize event) for responsive layouts which is better IMO but can be limiting if one needs device dimension based styling for SSR apps.
+You can use `disableCSSMediaQueries` option if you are not using SSR responsive styling or if it's a client only app.
+Read more here - [#1688](https://github.com/necolas/react-native-web/issues/1688) and [RNW talk](https://youtu.be/tFFn39lLO-U)
+
+---
 
 ## Contributing
 
