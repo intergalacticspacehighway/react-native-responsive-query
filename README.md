@@ -67,7 +67,7 @@ export default function App() {
 
 - initial (optional): ReactNativeStyle
 - query: Array<{minWidth: number, maxWidth: number, style: ReactNativeStyle}>
-- disableCSSMediaQueries (optional): boolean
+- [disableCSSMediaQueries](#disable-css-media-queries) (optional): boolean
 
 ### getResponsiveStyles(params?: UseResponsiveQueryParams)
 
@@ -183,7 +183,7 @@ return <View style={styles} />;
 **NOTE**
 
 Media query is currently a web-only feature. RNW recommends on using Dimension listener (which uses window resize event) for responsive layouts which is better IMO but can be limiting if one needs device dimension based styling for SSR apps.
-You can use `disableCSSMediaQueries` option if you are not using SSR responsive styling or if it's a client only app.
+You can use `disableCSSMediaQueries` option if you are not using SSR responsive styling or if it's a client side rendered app.
 Read more here - [#1688](https://github.com/necolas/react-native-web/issues/1688) and [RNW talk](https://youtu.be/tFFn39lLO-U)
 
 ---
