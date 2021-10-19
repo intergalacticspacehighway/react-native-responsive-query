@@ -7,6 +7,12 @@ Responsive style hook for React Native apps.
 - This hook aims to provide an API that can be useful for universal design systems like [dripsy](https://github.com/nandorojo/dripsy), [NativeBase](https://github.com/GeekyAnts/NativeBase) and React Native apps that uses responsive styling.
 - It transforms styles to CSS media-query on [react native web](https://github.com/necolas/react-native-web) that can be useful for responsive SSR react native web apps.
 
+#### You might not need this if,
+
+- You are not using SSR + React Native Web + Responsive Styling.
+- We're relying on internal RNW functions for injecting + generating styles. (most of these functions are pure (and memoises) but the current injecting solution might not be the cleanest). [Checkout source](https://github.com/intergalacticspacehighway/react-native-responsive-query/blob/main/src/useResponsiveQuery.web.ts)
+- Read more here and evaluate - [#1688](https://github.com/necolas/react-native-web/issues/1688) and [RNW talk](https://youtu.be/tFFn39lLO-U)
+
 ## Installation
 
 ```sh
