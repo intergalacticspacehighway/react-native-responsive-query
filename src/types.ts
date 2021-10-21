@@ -10,7 +10,7 @@ export type Query = {
 
 export type UseResponsiveQueryParams = {
   initial?: StyleSheetStyle | StyleSheetStyle[];
-  query: Query[];
+  query?: Query[];
   disableCSSMediaQueries?: boolean;
 };
 
