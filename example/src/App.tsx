@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useResponsiveQuery } from 'react-native-responsive-query';
 
 export default function App() {
-  const { dataSet, styles } = useResponsiveQuery({
+  const { styles } = useResponsiveQuery({
     initial: {
       backgroundColor: 'yellow',
       height: 200,
@@ -47,11 +47,7 @@ export default function App() {
 
   return (
     <ScrollView>
-      <View
-        //@ts-ignore - web only prop
-        dataSet={dataSet}
-        style={styles}
-      />
+      <View style={styles} />
 
       <View style={{ height: 20 }} />
       <GetResponsiveStyleExample />
@@ -62,7 +58,7 @@ export default function App() {
 const GetResponsiveStyleExample = () => {
   const { getResponsiveStyles } = useResponsiveQuery();
 
-  const { dataSet, styles } = getResponsiveStyles({
+  const { styles } = getResponsiveStyles({
     initial: {
       backgroundColor: 'yellow',
       height: 200,
@@ -88,11 +84,7 @@ const GetResponsiveStyleExample = () => {
     ],
   });
 
-  return (
-    <View
-      //@ts-ignore - web only prop
-      dataSet={dataSet}
-      style={styles}
-    />
-  );
+  console.log('styles ', styles);
+
+  return <View style={styles} />;
 };
