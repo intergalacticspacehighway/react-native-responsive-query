@@ -23,3 +23,5 @@ export const useResponsiveQuery = (
 
   return values;
 };
+
+export const getTextContent = () => '';
