@@ -45,13 +45,46 @@ export default function App() {
     ],
   });
 
-  console.log('styles ', styles);
-
   return (
     <ScrollView>
       <View style={styles} />
 
       <View style={{ height: 20 }} />
+      <GetResponsiveStyleExample />
     </ScrollView>
   );
 }
+
+const GetResponsiveStyleExample = () => {
+  const { getResponsiveStyles } = useResponsiveQuery();
+
+  const { styles } = getResponsiveStyles({
+    initial: {
+      backgroundColor: 'yellow',
+      height: 200,
+      width: 200,
+    },
+    query: [
+      {
+        minWidth: 400,
+        style: {
+          height: 300,
+          width: 300,
+          backgroundColor: 'pink',
+        },
+      },
+      {
+        minWidth: 800,
+        style: {
+          height: 400,
+          width: 400,
+          backgroundColor: 'black',
+        },
+      },
+    ],
+  });
+
+  console.log('styles ', styles);
+
+  return <View style={styles} />;
+};

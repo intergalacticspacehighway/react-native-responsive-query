@@ -1,3 +1,4 @@
+import React from 'react';
 import type {
   UseResponsiveQueryParams,
   UseResponsiveQueryReturnType,
@@ -24,4 +25,7 @@ export const useResponsiveQuery = (
   return values;
 };
 
-export const getTextContent = () => '';
+// noop, web-only. Refer useResponsiveQuery.web.tsx
+export const getStyleElement = () => {
+  return <></>;
+};

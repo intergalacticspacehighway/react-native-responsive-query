@@ -1,7 +1,4 @@
 {
   "extends": "./tsconfig",
-  "compilerOptions": {
-    "lib": ["es2016", "dom"]
-  },
   "exclude": ["example"]
 }

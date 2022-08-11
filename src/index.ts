@@ -1,3 +1,3 @@
-export { useResponsiveQuery, getTextContent } from './useResponsiveQuery';
+export { useResponsiveQuery, getStyleElement } from './useResponsiveQuery';
 export { ResponsiveQueryProvider } from './ResponsiveQueryProvider';
 export * from './types';

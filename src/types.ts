@@ -22,7 +22,7 @@ export type GetResponsiveStylesParams = Omit<
 >;
 
 export type GetResponsiveStylesReturnType = {
-  styles?: StyleSheetStyle[];
+  styles?: any;
 };
 
 export type UseResponsiveQueryReturnType = GetResponsiveStylesReturnType & {

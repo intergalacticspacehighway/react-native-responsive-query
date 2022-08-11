@@ -25,7 +25,7 @@ import { View } from 'react-native';
 import { useResponsiveQuery } from 'react-native-responsive-query';
 
 export default function App() {
-  const { dataSet, styles } = useResponsiveQuery({
+  const { styles } = useResponsiveQuery({
     initial: {
       backgroundColor: 'yellow',
       height: 200,
@@ -53,7 +53,7 @@ export default function App() {
     ],
   });
 
-  return <View dataSet={dataSet} style={styles} />;
+  return <View style={styles} />;
 }
 ```
 
@@ -80,7 +80,7 @@ import { useResponsiveQuery } from 'react-native-responsive-query';
 export default function App() {
   const { getResponsiveStyles } = useResponsiveQuery();
 
-  const { dataSet, styles } = getResponsiveStyles({
+  const { styles } = getResponsiveStyles({
     initial: {
       height: 200,
       width: 200,
@@ -95,14 +95,14 @@ export default function App() {
     ],
   });
 
-  return <View dataSet={dataSet} style={styles} />;
+  return <View style={styles} />;
 }
 ```
 
 ## Range query
 
 ```js
-const { styles, dataSet } = useResponsiveQuery({
+const { styles } = useResponsiveQuery({
   query: [
     {
       minWidth: 400,
@@ -114,7 +114,7 @@ const { styles, dataSet } = useResponsiveQuery({
   ],
 });
 
-return <View dataSet={dataSet} style={styles} />;
+return <View style={styles} />;
 ```
 
 - Here, background color `pink` will be applied only when screen width is >= 400 and <= 800.
@@ -158,11 +158,6 @@ const { styles } = useResponsiveQuery({
 
 return <View style={styles} />;
 ```
-
-## How it works?
-
-- It uses `dataSet` prop to add responsive styling.
-- We're relying on internal/undocumented RNW functions for injecting + generating styles. (most of these functions are pure (and memoises) but the current injecting solution might not be the cleanest). [Checkout source](https://github.com/intergalacticspacehighway/react-native-responsive-query/blob/main/src/useResponsiveQuery.web.ts)
 
 ## Examples
 
