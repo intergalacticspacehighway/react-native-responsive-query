@@ -111,15 +111,17 @@ const getStyleElement = () => {
 };
 
 const insert = (rule: string) => {
-  if (!styleSheet) {
-    const styleEl = document.createElement('style');
-    styleEl.type = 'text/css';
-    styleEl.appendChild(document.createTextNode(''));
-    document.head.appendChild(styleEl);
-    styleSheet = styleEl.sheet;
-  }
+  if (typeof window !== 'undefined') {
+    if (!styleSheet) {
+      const styleEl = document.createElement('style');
+      styleEl.type = 'text/css';
+      styleEl.appendChild(document.createTextNode(''));
+      document.head.appendChild(styleEl);
+      styleSheet = styleEl.sheet;
+    }
 
-  styleSheet.insertRule(rule, styleSheet.cssRules.length);
+    styleSheet.insertRule(rule, styleSheet.cssRules.length);
+  }
 };
 
 export { getStyleElement, useResponsiveQuery };
