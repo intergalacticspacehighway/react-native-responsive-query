@@ -11,11 +11,11 @@ Responsive style hook for React Native apps.
 ## Installation
 
 ```sh
-yarn add react-native-responsive-query
+yarn add react-native-responsive-query@canary
 
 // or
 
-npm install react-native-responsive-query
+npm install react-native-responsive-query@canary
 ```
 
 ## Usage
