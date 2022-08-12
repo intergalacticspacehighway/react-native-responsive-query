@@ -1,11 +1,9 @@
 //@ts-ignore
-import createCompileableStyle from 'react-native-web/dist/exports/StyleSheet/createCompileableStyle';
+import { atomic } from 'react-native-web/dist/exports/StyleSheet/compiler';
 //@ts-ignore
-import i18nStyle from 'react-native-web/dist/exports/StyleSheet/i18nStyle';
+import { createSheet } from 'react-native-web/dist/exports/StyleSheet/dom';
 //@ts-ignore
-import { atomic } from 'react-native-web/dist/exports/StyleSheet/compile';
-//@ts-ignore
-import styleResolver from 'react-native-web/dist/exports/StyleSheet/styleResolver';
+import preprocess from 'react-native-web/dist/exports/StyleSheet/preprocess.js';
 import type {
   DataSet,
   Query,
@@ -14,6 +12,7 @@ import type {
   GetResponsiveStylesParams,
 } from './types';
 import { StyleSheet } from 'react-native';
+// @ts-ignore
 import stableHash from 'stable-hash';
 import hash from './hash';
 import type { GetResponsiveStylesReturnType } from 'react-native-responsive-query';
@@ -45,6 +44,24 @@ import React from 'react';
 // refer line number 121 in `react-native-web/dist/exports/StyleSheet/createOrdererdCSSStyleSheetfile`.
 // We can trick this hash id generator by adding a comment on top of our media query rule in this format. /* media-query + data-attr {} */ then it'll start using media-query + data-attr as cache key
 
+/******************** Implementation after RNW v0.18 ***********************/
+
+/**
+ * 1. preprocess:- Handles shadow/text shadow conversion from RN styles to web *                 styles
+ *
+ * 2. atomic:- it handles prefixing, converting RN specific styles to web styles *             and generating the CSS selector.
+ *             Input {marginTop: 10}
+ *             Output
+ *             compiledStyle : marginTop: "r-marginTop-156q2ks"
+ *             compiledOrderedRules : ".r-marginTop-156q2ks{margin-top:10px;}"
+ *      a)compiledStyle:- Array it holds identifier/selector with properties
+ *      b)compiledOrderedRules:- Array it holds the css rule with selector name
+ *      Also from RNW v0.18 handles swapping of ltr styles if enabled by user
+ * 3. createSheet:- used to grab sheet which exist already created by rnw. when we *                  call createSheet without id it will return sheet which exist. *                  cause it automatically takes a default ID  which is already in *                  use (created by rnw with default ID) so this return sheet *                  which exist with  ID doesn't create a new sheet.
+ *
+ * This Implementation is based on asumptions that RNW doesn't change the         * function  or doesn't re-write them. if there is any change in RNW implmentation * it we'll break and needs to be updated.
+ *
+ */
 const MEDIA_QUERY_STYLESHEET_GROUP = 3;
 
 export const useResponsiveQuery = (
@@ -139,31 +156,32 @@ const getResponsiveStyles = (
         let mediaRules = '';
 
         const flattenQueryStyle = StyleSheet.flatten(queryRule.style);
-        const newStyle = createCompileableStyle(i18nStyle(flattenQueryStyle));
-        const results = atomic(newStyle);
-
-        Object.keys(results).forEach((key) => {
-          const oldIdentifier = results[key].identifier;
-
-          if (process.env.NODE_ENV !== 'production') {
-            dataSet[dataAttribute] =
-              oldIdentifier + ' ' + dataSet[dataAttribute];
-          }
-
-          results[key].rules.forEach((oldRule: string) => {
+        const newStyle = preprocess(flattenQueryStyle);
+        const [compiledStyle, compiledOrderedRules] = atomic(newStyle);
+        delete compiledStyle.$$css; //removing unnecessary $$css property
+        Object.keys(compiledStyle).forEach((key) => {
+          const oldIdentifier = compiledStyle[key];
+          compiledOrderedRules.forEach(([rules, _order]: any) => {
             // Rule returned by atomic has css selectors, so we'll replace it with data-attr selector
-            const newRule = oldRule.replace('.' + oldIdentifier, newIdentifier);
+            const newRule = rules[0].replace(
+              '.' + oldIdentifier,
+              newIdentifier
+            );
             mediaRules += newRule;
           });
         });
-
         if (mediaRules) {
           const mediaQueryRule = getMediaQueryRule(queryRule, mediaRules);
 
           // Here by prepending the /*${queryHash}{}*/ comment, we're kind of tricking the regex used by rn-web to verify if a rule is inserted or not.
           // Looks safe to me, just need to keep a check if there are any implementation changes in createStyleSheet file in rn-web in future.
           // Second argument defines the order of the insertion. DataSet and class selectors have same CSS specificity so we need to make sure that media rules have higher precedence. Max precendence in RN web is around 2.2 so 3 ensures styles will be appended later
-          styleResolver.sheet.insert(
+
+          // const stylesheetText = `/*${queryHash}{}*/${mediaQueryRule}`;
+
+          const sheet = createSheet(); //return a sheet object which is being used doesn't create one
+
+          sheet.insert(
             `/*${queryHash}{}*/${mediaQueryRule}`,
             MEDIA_QUERY_STYLESHEET_GROUP
           );
